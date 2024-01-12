@@ -1,0 +1,79 @@
+[project]
+name = "project-name"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Yicheng Luo", email = "ethanluoyc@gmail.com"},
+]
+dependencies = [
+    "absl-py>=2.0.0",
+    # Uncomment this if you use JAX
+    # "jax[cuda12_pip]>=0.4.23",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+# Uncomment this if use use JAX
+# [[tool.pdm.source]]
+# name = "jax_cuda"
+# url = "https://storage.googleapis.com/jax-releases/jax_cuda_releases.html"
+# verify_ssl = true
+# type = "find_links"
+
+[tool.pdm.scripts]
+test.cmd = "pytest -n auto --maxprocesses 8 --dist loadfile"
+# test.env = { JAX_PLATFORM_NAME = "cpu", JAX_DISABLE_MOST_OPTIMIZATIONS = "1" }
+lint.shell = "ruff . && black --check ."
+fmt.shell = "ruff --fix . && black ."
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "lxm3>=0.4.0",
+    "ruff>=0.1.11",
+    "black>=23.12.1",
+    "pytest>=7.4.4",
+    "pytest-xdist>=3.5.0",
+    "pre-commit>=3.6.0",
+]
+
+# Ruff configuration
+# https://docs.astral.sh/ruff/configuration/
+[tool.ruff]
+line-length = 120
+select = [
+    "E", # pycodestyle
+    "F", # pyflakes
+    "I", # isort
+]
+ignore = ["E731"]
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+force-single-line = true
+force-sort-within-sections = true
+single-line-exclusions = ["typing"]
+
+# Black configuration
+# https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.github
+  | \.venv
+  | docs
+  | third_party
+  | scratch
+)/
+'''
